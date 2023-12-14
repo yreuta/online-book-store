@@ -1,6 +1,7 @@
 package mate.academy.bookshop.repository;
 
 import java.util.List;
+import java.util.Optional;
 import mate.academy.bookshop.model.Book;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -45,6 +46,15 @@ public class BookRepositoryImpl implements BookRepository {
             return session.createQuery("FROM Book b", Book.class).getResultList();
         } catch (Exception e) {
             throw new RuntimeException("Can't find all books", e);
+        }
+    }
+
+    @Override
+    public Optional<Book> findById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            return Optional.ofNullable(session.get(Book.class, id));
+        } catch (Exception e) {
+            throw new RuntimeException("Can't find book by id: " + id, e);
         }
     }
 }
